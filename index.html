@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spice & Charcoal | Premium Indian Dining & Online Ordering</title>
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Experience the rich heritage of Indian cuisine. Order online from Spice & Charcoal - fresh, authentic, and delivered straight to your doorstep with our premium red & black luxury dining experience.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Background glowing ambient spots -->
+    <div class="glow-bg glow-red-1"></div>
+    <div class="glow-bg glow-red-2"></div>
+
+    <!-- Header / Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="navbar-container">
+            <a href="#" class="logo">
+                <span class="logo-accent">Spice</span> & Charcoal
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#about" class="nav-link">Our Story</a>
+                <a href="#reviews" class="nav-link">Reviews</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="cart-trigger" id="cartTrigger" aria-label="Open Shopping Cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="hero-content">
+            <span class="hero-subtitle"><i class="fa-solid fa-fire-flame-curved"></i> A Premium Culinary Journey</span>
+            <h1 class="hero-title">Fiery Flavors, <br><span class="highlight-text">Timeless Traditions</span></h1>
+            <p class="hero-description">
+                Immerse yourself in the authentic taste of upscale Indian cuisine. Prepared by master chefs with hand-picked spices, slow-cooked to perfection over glowing charcoal.
+            </p>
+            <div class="hero-buttons">
+                <a href="#menu" class="btn btn-primary">Order Online Now</a>
+                <a href="#about" class="btn btn-outline">Explore Our Story</a>
+            </div>
+        </div>
+        <div class="hero-image-container">
+            <div class="hero-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1585938338392-50a59970d8ee?auto=format&fit=crop&w=800&q=80" alt="Exquisite Indian Platter Feast" class="hero-img">
+                <div class="hero-floating-card card-1">
+                    <i class="fa-solid fa-star text-gold"></i>
+                    <div>
+                        <h4>4.9 Rating</h4>
+                        <p>15,000+ Reviews</p>
+                    </div>
+                </div>
+                <div class="hero-floating-card card-2">
+                    <i class="fa-solid fa-truck-fast text-red"></i>
+                    <div>
+                        <h4>Express Delivery</h4>
+                        <p>Under 30 Mins</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features Section -->
+    <section class="features-section">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-leaf"></i></div>
+            <h3>100% Fresh & Authentic</h3>
+            <p>Every herb and spice sourced straight from the heart of India.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-hat-chef"></i></div>
+            <h3>Master Chef Crafted</h3>
+            <p>Artisanal recipes curated with culinary precision and creativity.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-fire"></i></div>
+            <h3>Charcoal Clay Oven</h3>
+            <p>Traditional clay tandoor baked naans and smoky flame-grilled kebabs.</p>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="section-header">
+            <span class="section-tag">Taste the Magic</span>
+            <h2 class="section-title">Explore Our Curated Menu</h2>
+            <div class="section-divider"></div>
+        </div>
+
+        <!-- Menu Filter and Search Controls -->
+        <div class="menu-controls">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="menuSearch" placeholder="Search delicious dishes (e.g., Tikka, Biryani, Naan)..." aria-label="Search food items">
+                <button class="clear-search" id="clearSearch" aria-label="Clear Search"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="category-tabs-container">
+                <div class="category-tabs" id="categoryTabs">
+                    <button class="tab-btn active" data-category="all">All Items</button>
+                    <button class="tab-btn" data-category="starters">Starters</button>
+                    <button class="tab-btn" data-category="mains">Main Courses</button>
+                    <button class="tab-btn" data-category="sides">Sides & Bread</button>
+                    <button class="tab-btn" data-category="desserts">Desserts</button>
+                    <button class="tab-btn" data-category="beverages">Beverages</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid of Food Cards -->
+        <div class="menu-grid" id="menuGrid">
+            <!-- Dynamically populated via JS -->
+            <div class="menu-skeleton"></div>
+            <div class="menu-skeleton"></div>
+            <div class="menu-skeleton"></div>
+            <div class="menu-skeleton"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="about-grid">
+            <div class="about-image-side">
+                <img src="https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=800&q=80" alt="Clay Oven Cooking" class="about-img">
+            </div>
+            <div class="about-content-side">
+                <span class="section-tag">Since 2012</span>
+                <h2 class="section-title">The Art of Spices, Charcoal, and Smoke</h2>
+                <div class="section-divider"></div>
+                <p>
+                    At Spice & Charcoal, we believe that dining is not just about eating, but about experiencing a story. Our kitchen pays homage to the ancient recipes of the royal courts of India, blending them with modern culinary innovations.
+                </p>
+                <p>
+                    Every dish is cooked in custom tandoors fueled by genuine coconut-husk charcoal, infusing a deep, unmatched smoky aroma that highlights the natural richness of fresh ingredients, rich cream, and handcrafted spices.
+                </p>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-num">12+</span>
+                        <span class="stat-label">Years of Heritage</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">50+</span>
+                        <span class="stat-label">Traditional Recipes</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">100%</span>
+                        <span class="stat-label">Love & Warmth</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section" id="reviews">
+        <div class="section-header">
+            <span class="section-tag">Testimonials</span>
+            <h2 class="section-title">What Our Guests Say</h2>
+            <div class="section-divider"></div>
+        </div>
+        
+        <div class="reviews-grid">
+            <div class="review-card">
+                <div class="review-stars">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <p class="review-text">
+                    "The Butter Chicken is absolutely heavenly. The smoky charcoal flavor from the oven combined with the rich, velvety gravy is something I've never tasted anywhere else. Outstanding service too!"
+                </p>
+                <div class="reviewer-info">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Samantha Miller" class="reviewer-avatar">
+                    <div>
+                        <h4 class="reviewer-name">Samantha Miller</h4>
+                        <p class="reviewer-title">Food Critic</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-stars">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <p class="review-text">
+                    "Hyderabadi Biryani here is highly authentic. The grains of rice are perfectly separated, fragrant with saffron, and the spice level was exactly the fiery kick I wanted. The cart system made online ordering seamless!"
+                </p>
+                <div class="reviewer-info">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" alt="Rajesh Kumar" class="reviewer-avatar">
+                    <div>
+                        <h4 class="reviewer-name">Rajesh Kumar</h4>
+                        <p class="reviewer-title">Software Engineer</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <div class="review-stars">
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star"></i>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+                <p class="review-text">
+                    "I ordered the Garlic Naan, Veg Samosas, and Mango Lassi. The samosas arrived blazing hot and incredibly crispy. The lassi was rich, thick, and not overly sweet. Easily the best premium Indian food delivery in town."
+                </p>
+                <div class="reviewer-info">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" alt="Aria Vance" class="reviewer-avatar">
+                    <div>
+                        <h4 class="reviewer-name">Aria Vance</h4>
+                        <p class="reviewer-title">Lifestyle Blogger</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sliding Cart Drawer Panel -->
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-overlay" id="cartDrawerOverlay"></div>
+        <div class="cart-drawer-content">
+            <div class="cart-drawer-header">
+                <h3>Your Premium Order</h3>
+                <button class="close-cart-btn" id="closeCartBtn" aria-label="Close Cart">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="cart-drawer-body" id="cartDrawerBody">
+                <!-- If cart is empty, show empty state -->
+                <div class="cart-empty-state" id="cartEmptyState">
+                    <i class="fa-solid fa-bag-shopping empty-icon"></i>
+                    <p>Your bag is empty.</p>
+                    <p class="empty-sub">Add delicious dishes from our menu to begin your feast.</p>
+                    <button class="btn btn-primary start-ordering-btn" id="startOrderingBtn">Browse Menu</button>
+                </div>
+                
+                <!-- Cart items list (loaded via JS) -->
+                <div class="cart-items-list" id="cartItemsList"></div>
+            </div>
+            
+            <div class="cart-drawer-footer" id="cartDrawerFooter">
+                <div class="price-row">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">$0.00</span>
+                </div>
+                <div class="price-row">
+                    <span>Taxes & Fees (10%)</span>
+                    <span id="cartTax">$0.00</span>
+                </div>
+                <div class="price-row">
+                    <span>Express Delivery</span>
+                    <span id="cartDelivery" class="text-green">FREE</span>
+                </div>
+                <div class="price-row grand-total-row">
+                    <span>Grand Total</span>
+                    <span id="cartGrandTotal">$0.00</span>
+                </div>
+                <button class="btn btn-primary btn-checkout" id="proceedToCheckoutBtn">
+                    Proceed to Checkout <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal Overlay -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Secure Checkout</h3>
+                <button class="modal-close" id="closeCheckoutBtn" aria-label="Close Checkout"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-grid">
+                    <!-- Checkout Form Side -->
+                    <div class="checkout-form-container">
+                        <form id="checkoutForm" onsubmit="return false;">
+                            <h4 class="form-title-heading">Delivery Details</h4>
+                            <div class="form-grid">
+                                <div class="form-group col-full">
+                                    <label for="custName">Full Name</label>
+                                    <input type="text" id="custName" required placeholder="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label for="custPhone">Phone Number</label>
+                                    <input type="tel" id="custPhone" required placeholder="+1 (555) 000-0000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="custEmail">Email Address</label>
+                                    <input type="email" id="custEmail" required placeholder="john@example.com">
+                                </div>
+                                <div class="form-group col-full">
+                                    <label for="custAddress">Delivery Address</label>
+                                    <input type="text" id="custAddress" required placeholder="123 Royal Spice Lane, Suite A">
+                                </div>
+                            </div>
+
+                            <h4 class="form-title-heading payment-heading">Payment Information</h4>
+                            <div class="payment-tabs">
+                                <button type="button" class="pay-tab-btn active" data-method="card">
+                                    <i class="fa-regular fa-credit-card"></i> Card
+                                </button>
+                                <button type="button" class="pay-tab-btn" data-method="upi">
+                                    <i class="fa-solid fa-mobile-screen-button"></i> UPI / QR
+                                </button>
+                                <button type="button" class="pay-tab-btn" data-method="cod">
+                                    <i class="fa-solid fa-hand-holding-dollar"></i> Cash on Delivery
+                                </button>
+                            </div>
+
+                            <!-- Card Details Section -->
+                            <div class="payment-details-panel active" id="cardDetailsPanel">
+                                <div class="form-grid">
+                                    <div class="form-group col-full">
+                                        <label for="cardNumber">Card Number</label>
+                                        <div class="input-with-icon">
+                                            <i class="fa-regular fa-credit-card field-icon"></i>
+                                            <input type="text" id="cardNumber" placeholder="4111 2222 3333 4444" maxlength="19">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardExpiry">Expiry Date</label>
+                                        <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cardCvv">CVV</label>
+                                        <input type="password" id="cardCvv" placeholder="123" maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- UPI Details Section -->
+                            <div class="payment-details-panel" id="upiDetailsPanel">
+                                <p class="upi-instructions">Pay using any UPI app (GooglePay, PhonePe, Paytm, etc.)</p>
+                                <div class="form-group col-full">
+                                    <label for="upiId">Enter UPI ID</label>
+                                    <input type="text" id="upiId" placeholder="john@okaxis">
+                                </div>
+                                <div class="upi-divider">OR</div>
+                                <div class="upi-qr-box">
+                                    <i class="fa-solid fa-qrcode qr-icon"></i>
+                                    <p>Scan QR code at delivery</p>
+                                </div>
+                            </div>
+
+                            <!-- COD Details Section -->
+                            <div class="payment-details-panel" id="codDetailsPanel">
+                                <div class="cod-box">
+                                    <i class="fa-solid fa-hand-holding-dollar cod-icon"></i>
+                                    <p>Pay cash or cards to our delivery agent upon arrival.</p>
+                                    <p class="text-green"><i class="fa-solid fa-circle-check"></i> No contact delivery option available.</p>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-submit-order" id="submitOrderBtn">
+                                Place Premium Order ($0.00)
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Order Summary Side -->
+                    <div class="checkout-summary-container">
+                        <h4>Order Summary</h4>
+                        <div class="summary-items-list" id="summaryItemsList">
+                            <!-- Populated via JS -->
+                        </div>
+                        <div class="summary-totals">
+                            <div class="price-row">
+                                <span>Subtotal</span>
+                                <span id="summarySubtotal">$0.00</span>
+                            </div>
+                            <div class="price-row">
+                                <span>Taxes & Fees</span>
+                                <span id="summaryTax">$0.00</span>
+                            </div>
+                            <div class="price-row">
+                                <span>Delivery Fee</span>
+                                <span class="text-green">FREE</span>
+                            </div>
+                            <div class="price-row summary-grand-total">
+                                <span>Total to Pay</span>
+                                <span id="summaryGrandTotal">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success & Tracking Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-card success-card">
+            <div class="success-animation-container">
+                <div class="fireworks">
+                    <i class="fa-solid fa-fire text-red animate-flame"></i>
+                </div>
+                <div class="success-check">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+            </div>
+            
+            <h2 class="success-title">Your Feast is on the Way!</h2>
+            <p class="success-subtitle">Order ID: <span id="successOrderId" class="text-red">#SAC-98421</span></p>
+            <p class="success-description">
+                Thank you for choosing Spice & Charcoal, <span id="successCustName">John</span>. Your gourmet feast is being prepared with premium authentic spices.
+            </p>
+
+            <!-- Order Tracking Progress Bar -->
+            <div class="order-tracker">
+                <div class="tracker-line">
+                    <div class="tracker-line-fill" id="trackerFill"></div>
+                </div>
+                
+                <div class="tracker-step active" id="step1">
+                    <div class="step-dot"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <span class="step-name">Confirmed</span>
+                </div>
+                <div class="tracker-step" id="step2">
+                    <div class="step-dot"><i class="fa-solid fa-kitchen-set"></i></div>
+                    <span class="step-name">Cooking</span>
+                </div>
+                <div class="tracker-step" id="step3">
+                    <div class="step-dot"><i class="fa-solid fa-motorcycle"></i></div>
+                    <span class="step-name">Transit</span>
+                </div>
+                <div class="tracker-step" id="step4">
+                    <div class="step-dot"><i class="fa-solid fa-house-chimney-crack"></i></div>
+                    <span class="step-name">Delivered</span>
+                </div>
+            </div>
+
+            <div class="tracker-status-box">
+                <i class="fa-solid fa-rotate spin text-red" id="trackerSpinner"></i>
+                <p id="trackerStatusText">Our chefs are verifying the order details...</p>
+            </div>
+
+            <button class="btn btn-primary" id="successCloseBtn">Order Something Else</button>
+        </div>
+    </div>
+
+    <!-- Contact & Footer Section -->
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-info">
+                <a href="#" class="logo footer-logo">
+                    <span class="logo-accent">Spice</span> & Charcoal
+                </a>
+                <p class="footer-desc">
+                    Experience fine Indian gastronomy with a modern flair. Smoky tandoors, vibrant curries, and an unforgettable atmosphere.
+                </p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#menu">Our Menu</a></li>
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#reviews">Testimonials</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-hours">
+                <h4>Opening Hours</h4>
+                <ul>
+                    <li>Monday - Thursday: 12:00 PM - 10:00 PM</li>
+                    <li>Friday - Saturday: 12:00 PM - 11:00 PM</li>
+                    <li>Sunday: 11:30 AM - 10:00 PM</li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h4>Find Us</h4>
+                <p><i class="fa-solid fa-location-dot"></i> 123 Luxury Gastronomy Blvd, New York, NY 10001</p>
+                <p><i class="fa-solid fa-phone"></i> +1 (212) 555-7742</p>
+                <p><i class="fa-solid fa-envelope"></i> reservations@spiceandcharcoal.com</p>
+                
+                <!-- Map Placeholder with Premium Styled Card -->
+                <div class="map-placeholder">
+                    <div class="map-overlay">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>Click to view interactive map</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Spice & Charcoal. All rights reserved. Made with love for premium Indian dining.</p>
+        </div>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
