@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: wb-restaurant-backend
+    runtime: node
+    plan: free
+    rootDir: .
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: PORT
+        value: 3000
+      - key: CORS_ORIGIN
+        value: https://prateek11710.github.io,http://localhost:3000
+      - key: WHATSAPP_API_VERSION
+        value: v22.0
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false
+      - key: WHATSAPP_OWNER_NUMBER
+        value: 919105624475

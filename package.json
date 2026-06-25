@@ -2,10 +2,10 @@
   "name": "spice-and-charcoal",
   "version": "1.0.0",
   "description": "Premium Indian food ordering website with interactive cart and order tracking",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "npx http-server -p 3000",
-    "dev": "npx http-server -p 3000"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "keywords": [
     "restaurant",
@@ -17,5 +17,13 @@
     "javascript"
   ],
   "author": "Spice & Charcoal",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2"
+  }
 }

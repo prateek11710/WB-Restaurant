@@ -129,6 +129,7 @@ let cart = [];
 let currentCategory = "all";
 let searchQuery = "";
 let paymentMethod = "card";
+const API_BASE_URL = getApiBaseUrl();
 
 // DOM Elements
 const menuGrid = document.getElementById("menuGrid");
@@ -198,6 +199,87 @@ function loadCartFromStorage() {
 // Save cart to LocalStorage
 function saveCartToStorage() {
     localStorage.setItem("sc_cart", JSON.stringify(cart));
+}
+
+function getApiBaseUrl() {
+    const configuredUrl = typeof window.SC_API_BASE_URL === "string"
+        ? window.SC_API_BASE_URL.trim()
+        : "";
+
+    return configuredUrl.replace(/\/$/, "");
+}
+
+function getApiUrl(path) {
+    return `${API_BASE_URL}${path}`;
+}
+
+function getCheckoutPayload() {
+    return {
+        customer: {
+            name: document.getElementById("custName").value.trim(),
+            phone: document.getElementById("custPhone").value.trim(),
+            email: document.getElementById("custEmail").value.trim(),
+            address: document.getElementById("custAddress").value.trim()
+        },
+        paymentMethod,
+        items: cart.map(item => ({
+            id: item.id,
+            quantity: item.quantity
+        }))
+    };
+}
+
+async function createOrder(payload) {
+    if (window.location.hostname.endsWith("github.io") && !API_BASE_URL) {
+        throw new Error("Backend API URL is missing. Set `window.SC_API_BASE_URL` to your deployed Node/Render/Railway backend before using checkout on GitHub Pages.");
+    }
+
+    const response = await fetch(getApiUrl("/api/orders"), {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || !data.ok) {
+        throw new Error(data.error || "Unable to place the order right now.");
+    }
+
+    return data;
+}
+
+function setSubmitOrderLoading(isLoading, totalLabel = summaryGrandTotal.innerText) {
+    submitOrderBtn.disabled = isLoading;
+    submitOrderBtn.innerText = isLoading
+        ? "Sending Order..."
+        : `Place Premium Order (${totalLabel})`;
+}
+
+function getInitialTrackingMessage(notifications) {
+    if (!notifications) {
+        return "Order confirmed. Sending updates to the kitchen...";
+    }
+
+    const ownerDelivered = notifications.owner?.delivered;
+    const customerDelivered = notifications.customer?.delivered;
+    const ownerAttempted = notifications.owner?.attempted;
+
+    if (ownerDelivered && customerDelivered) {
+        return "Order confirmed and WhatsApp notifications were sent to both the owner and customer.";
+    }
+
+    if (ownerDelivered && !customerDelivered) {
+        return "Order confirmed and the owner was notified on WhatsApp. Customer invoice delivery needs WhatsApp API approval or template setup.";
+    }
+
+    if (!ownerAttempted) {
+        return "Order confirmed. The backend is live, but WhatsApp credentials are not configured yet.";
+    }
+
+    return "Order confirmed, but WhatsApp delivery failed. Please check your Meta WhatsApp API credentials on the backend.";
 }
 
 // ==========================================================================
@@ -481,7 +563,7 @@ document.getElementById("cardExpiry").addEventListener("input", (e) => {
 // Order Tracking Simulator (State Machine)
 // ==========================================================================
 
-function runOrderTracking(custName) {
+function runOrderTracking(custName, orderId, notifications) {
     const trackerFill = document.getElementById("trackerFill");
     const steps = [
         document.getElementById("step1"),
@@ -494,7 +576,7 @@ function runOrderTracking(custName) {
 
     // Initialize tracking state
     document.getElementById("successCustName").innerText = custName;
-    document.getElementById("successOrderId").innerText = `#SAC-${Math.floor(100000 + Math.random() * 900000)}`;
+    document.getElementById("successOrderId").innerText = orderId;
     
     // Reset tracker animation elements
     trackerFill.style.width = "0%";
@@ -503,7 +585,7 @@ function runOrderTracking(custName) {
         if (idx === 0) step.classList.add("active");
     });
     spinner.className = "fa-solid fa-rotate spin text-red";
-    statusText.innerText = "Processing checkout & verifying payment...";
+    statusText.innerText = getInitialTrackingMessage(notifications);
 
     // Stage 1: Confirmed (after 1s)
     setTimeout(() => {
@@ -630,27 +712,38 @@ function setupEventListeners() {
     });
 
     // 6. Submit Order Form Action
-    checkoutForm.addEventListener("submit", (e) => {
+    checkoutForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // Retrieve delivery details
-        const nameInput = document.getElementById("custName").value;
-        
-        // Close checkout modal, clear cart, reset form
-        checkoutModal.classList.remove("active");
-        
-        // Open Success Tracking Modal
-        successModal.classList.add("active");
-        
-        // Start simulation state machine
-        runOrderTracking(nameInput);
-        
-        // Empty shopping cart state
-        cart = [];
-        saveCartToStorage();
-        updateCartUI();
-        renderMenu();
-        checkoutForm.reset();
+        if (cart.length === 0) {
+            alert("Your cart is empty. Add some dishes before checking out.");
+            return;
+        }
+
+        const payload = getCheckoutPayload();
+        const orderTotalLabel = summaryGrandTotal.innerText;
+
+        try {
+            setSubmitOrderLoading(true, orderTotalLabel);
+            const orderResponse = await createOrder(payload);
+
+            // Close checkout modal, then show success modal with real order data
+            checkoutModal.classList.remove("active");
+            successModal.classList.add("active");
+            runOrderTracking(payload.customer.name, orderResponse.orderId, orderResponse.notifications);
+
+            // Empty shopping cart state
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
+            renderMenu();
+            checkoutForm.reset();
+            switchPaymentMethod("card");
+        } catch (error) {
+            alert(error.message || "Unable to place your order.");
+        } finally {
+            setSubmitOrderLoading(false);
+        }
     });
 
     successCloseBtn.addEventListener("click", () => {
