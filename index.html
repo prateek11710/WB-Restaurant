@@ -527,6 +527,50 @@
         </div>
     </footer>
 
+    <!-- Floating AI Chatbot Button -->
+    <button class="chatbot-trigger" id="chatbotTrigger" aria-label="Open AI Chatbot">
+        <i class="fa-solid fa-comments"></i>
+        <span class="pulse-ring"></span>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbotWindow">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div class="bot-avatar"><i class="fa-solid fa-robot"></i></div>
+                <div>
+                    <h4>SpiceBot</h4>
+                    <span class="bot-status"><span class="status-dot"></span> Online</span>
+                </div>
+            </div>
+            <button class="chatbot-close" id="chatbotClose" aria-label="Close Chatbot"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div class="chatbot-body" id="chatbotBody">
+            <div class="chat-message bot">
+                <p>Namaste! I am <strong>SpiceBot</strong>, your AI Assistant. 🌶️</p>
+            </div>
+            <div class="chat-message bot">
+                <p>I can help you browse the menu, add items to your cart, check your total, or open checkout. Try asking: <em>"Recommend something spicy"</em> or <em>"Add 2 Butter Chicken"</em>!</p>
+            </div>
+        </div>
+        
+        <!-- Closed hours simulation bar -->
+        <div class="chatbot-simulation-bar">
+            <label class="sim-toggle" for="simClosedHours">
+                <input type="checkbox" id="simClosedHours">
+                <span class="sim-toggle-text">Simulate Closed Hours (10PM - 8AM)</span>
+            </label>
+        </div>
+
+        <form class="chatbot-footer" id="chatbotForm" onsubmit="return false;">
+            <input type="text" id="chatbotInput" placeholder="Type a message..." aria-label="Chat message">
+            <button type="submit" class="chat-send-btn" id="chatbotSendBtn" aria-label="Send message">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+
     <!-- Custom JavaScript -->
     <script src="app.js"></script>
 </body>

@@ -676,3 +676,267 @@ function setupEventListeners() {
         window.open("https://maps.google.com/?q=123+Luxury+Gastronomy+Blvd+New+York", "_blank");
     });
 }
+
+// ==========================================================================
+// SpiceBot AI Chatbot Engine
+// ==========================================================================
+
+function initChatbot() {
+    const chatbotTrigger = document.getElementById("chatbotTrigger");
+    const chatbotWindow = document.getElementById("chatbotWindow");
+    const chatbotClose = document.getElementById("chatbotClose");
+    const chatbotBody = document.getElementById("chatbotBody");
+    const chatbotForm = document.getElementById("chatbotForm");
+    const chatbotInput = document.getElementById("chatbotInput");
+    const simClosedHours = document.getElementById("simClosedHours");
+
+    if (!chatbotTrigger || !chatbotWindow || !chatbotClose || !chatbotBody || !chatbotForm || !chatbotInput) {
+        return;
+    }
+
+    // Toggle Chatbot Window
+    chatbotTrigger.addEventListener("click", () => {
+        chatbotWindow.classList.toggle("active");
+        if (chatbotWindow.classList.contains("active")) {
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        }
+    });
+
+    chatbotClose.addEventListener("click", () => {
+        chatbotWindow.classList.remove("active");
+    });
+
+    // Handle Form Submit
+    chatbotForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const text = chatbotInput.value.trim();
+        if (!text) return;
+
+        appendChatMessage("user", text);
+        chatbotInput.value = "";
+
+        // Bot responds with a small typing delay for realism
+        setTimeout(() => {
+            const response = generateBotResponse(text);
+            appendChatMessage("bot", response);
+        }, 500);
+    });
+
+    function appendChatMessage(sender, text) {
+        const msgDiv = document.createElement("div");
+        msgDiv.classList.add("chat-message", sender);
+        msgDiv.innerHTML = `<p>${text}</p>`;
+        chatbotBody.appendChild(msgDiv);
+        chatbotBody.scrollTop = chatbotBody.scrollHeight;
+    }
+
+    function isRestaurantClosed() {
+        if (simClosedHours && simClosedHours.checked) {
+            return true;
+        }
+        const hour = new Date().getHours();
+        return (hour >= 22 || hour < 8);
+    }
+
+    function generateBotResponse(userMsg) {
+        const msg = userMsg.toLowerCase().trim();
+        const closed = isRestaurantClosed();
+
+        // 1. Check if user is asking for help
+        if (msg === "help" || msg.includes("what can you do") || msg.includes("commands")) {
+            return `Here are some things I can do for you:<br>
+            • <strong>Add items</strong>: <em>"Add 2 Butter Chicken"</em>, <em>"Add Garlic Naan"</em><br>
+            • <strong>View cart</strong>: <em>"Show my cart"</em>, <em>"What is my total?"</em><br>
+            • <strong>Remove items</strong>: <em>"Remove Samosa"</em><br>
+            • <strong>Clear cart</strong>: <em>"Empty my cart"</em><br>
+            • <strong>Checkout</strong>: <em>"Checkout now"</em>, <em>"Place order"</em><br>
+            • <strong>Ask for suggestions</strong>: <em>"Recommend something spicy"</em>`;
+        }
+
+        // 2. Check if restaurant is closed and action is an order-related command
+        const isOrderCommand = msg.includes("add") || msg.includes("remove") || msg.includes("delete") || 
+                               msg.includes("checkout") || msg.includes("order") || msg.includes("clear") || 
+                               msg.includes("empty");
+        
+        if (closed && isOrderCommand) {
+            return `<strong>Kitchen is Closed!</strong> 🏮<br>
+            Our online ordering system is offline between <strong>10:00 PM and 8:00 AM</strong>. 
+            We cannot modify your cart or process checkouts at this time. 
+            Please visit us tomorrow during business hours to place your order!`;
+        }
+
+        if (closed) {
+            // General conversation is allowed even if closed
+            if (msg.includes("recommend") || msg.includes("special") || msg.includes("good") || msg.includes("best")) {
+                return `Even though our kitchen is currently closed, I can highly recommend our signature dishes for tomorrow!<br>
+                • 🔥 <strong>Hyderabadi Dum Biryani</strong>: Fragrant saffron rice with spiced chicken, slow-cooked to smoky perfection.<br>
+                • 👑 <strong>Royal Butter Chicken</strong>: Succulent tandoori chicken simmered in a velvety butter tomato cream gravy.<br>
+                • 🥬 <strong>Paneer Tikka Shaslik</strong>: Perfect cottage cheese starter grilled in our charcoal tandoor.`;
+            }
+            if (msg.includes("hi") || msg.includes("hello") || msg.includes("hey") || msg.includes("namaste")) {
+                return `Namaste! 🏮 We are currently closed for the night (hours: 8:00 AM - 10:00 PM). While online ordering is offline, feel free to ask about our menu or get recommendations for tomorrow!`;
+            }
+            return `We are currently closed for the night (10:00 PM to 8:00 AM). 🏮 We cannot take orders right now, but feel free to browse our menu! Ask for <em>"recommendations"</em> or type <em>"help"</em> to learn more.`;
+        }
+
+        // 3. Open hours logic - process commands
+        
+        // ADD COMMAND
+        if (msg.startsWith("add ") || msg.includes("add ")) {
+            let foundItem = null;
+            let qty = 1;
+
+            // Extract quantity if present
+            const numMatch = msg.match(/\b(\d+)\b/);
+            if (numMatch) {
+                qty = parseInt(numMatch[1]);
+            }
+
+            for (const item of MENU_ITEMS) {
+                const nameLower = item.name.toLowerCase();
+                const cleanName = nameLower
+                    .replace("crispy ", "")
+                    .replace("smoked ", "")
+                    .replace("royal ", "")
+                    .replace("shahi ", "")
+                    .replace("slow-cooked ", "")
+                    .replace("warm ", "")
+                    .replace("tandoori ", "")
+                    .replace("artisanal ", "")
+                    .trim();
+                
+                if (msg.includes(cleanName) || msg.includes(item.id)) {
+                    foundItem = item;
+                    break;
+                }
+            }
+
+            if (foundItem) {
+                // Add to cart in a loop
+                for (let i = 0; i < qty; i++) {
+                    addItemToCart(foundItem.id);
+                }
+                return `Excellent choice! 🌶️ I have added <strong>${qty}x ${foundItem.name}</strong> to your cart.<br>
+                Your grand total is now <strong>${cartGrandTotal.innerText}</strong>. You can type <em>"checkout"</em> to complete your order!`;
+            } else {
+                return `I couldn't find that dish on our menu. Could you please specify the item name? (e.g., <em>"Add Butter Chicken"</em>, <em>"Add 2 Garlic Naan"</em>)`;
+            }
+        }
+
+        // REMOVE COMMAND
+        if (msg.startsWith("remove ") || msg.includes("remove ") || msg.startsWith("delete ") || msg.includes("delete ")) {
+            let foundItem = null;
+            for (const item of MENU_ITEMS) {
+                const nameLower = item.name.toLowerCase();
+                const cleanName = nameLower
+                    .replace("crispy ", "")
+                    .replace("smoked ", "")
+                    .replace("royal ", "")
+                    .replace("shahi ", "")
+                    .replace("slow-cooked ", "")
+                    .replace("warm ", "")
+                    .replace("tandoori ", "")
+                    .replace("artisanal ", "")
+                    .trim();
+
+                if (msg.includes(cleanName) || msg.includes(item.id)) {
+                    foundItem = item;
+                    break;
+                }
+            }
+
+            if (foundItem) {
+                const inCart = cart.find(i => i.id === foundItem.id);
+                if (inCart) {
+                    deleteItemFromCart(foundItem.id);
+                    return `I have removed <strong>${foundItem.name}</strong> from your cart. 🗑️ Your total is now ${cartGrandTotal.innerText}.`;
+                } else {
+                    return `<strong>${foundItem.name}</strong> is not in your cart!`;
+                }
+            } else {
+                return `I couldn't find that dish. Which item would you like to remove? (e.g., <em>"Remove Garlic Naan"</em>)`;
+            }
+        }
+
+        // SHOW CART COMMAND
+        if (msg === "cart" || msg.includes("show cart") || msg.includes("view cart") || msg.includes("my cart") || msg.includes("total")) {
+            if (cart.length === 0) {
+                return `Your cart is currently empty! 🛒 Add something delicious by saying: <em>"Add Butter Chicken"</em>.`;
+            }
+            
+            const itemList = cart.map(item => `• ${item.quantity}x ${item.name} ($${(item.price * item.quantity).toFixed(2)})`).join("<br>");
+            return `Here is your current bag: 🛒<br>
+            ${itemList}<br>
+            ----------------------<br>
+            Grand Total (with taxes): <strong>${cartGrandTotal.innerText}</strong><br>
+            Ready to eat? Type <em>"checkout"</em>!`;
+        }
+
+        // CLEAR CART COMMAND
+        if (msg.includes("clear cart") || msg.includes("empty cart") || msg.includes("clear bag") || msg.includes("empty bag")) {
+            if (cart.length === 0) {
+                return `Your cart is already empty!`;
+            }
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
+            renderMenu();
+            return `I have emptied your shopping cart. Your bag is now clean! 🗑️`;
+        }
+
+        // CHECKOUT COMMAND
+        if (msg === "checkout" || msg.includes("checkout") || msg.includes("order now") || msg.includes("place order") || msg.includes("pay")) {
+            if (cart.length === 0) {
+                return `Your cart is empty! Add some dishes from our menu first before checking out.`;
+            }
+            
+            // Open secure checkout modal
+            cartDrawer.classList.remove("active");
+            checkoutModal.classList.add("active");
+            switchPaymentMethod("card");
+            
+            return `Opening secure checkout modal for you! 💳 Please enter your delivery details and choose your payment method (Card, UPI, or Cash). Let me know if you need anything else!`;
+        }
+
+        // RECOMMENDATIONS COMMAND
+        if (msg.includes("recommend") || msg.includes("best seller") || msg.includes("what is good") || msg.includes("specialty") || msg.includes("spicy")) {
+            if (msg.includes("spicy") || msg.includes("hot") || msg.includes("fiery")) {
+                return `For a fiery kick, I highly recommend:<br>
+                • 🔥 <strong>Hyderabadi Dum Biryani</strong> ($18.99): Fragrant saffron rice layered with hot spiced chicken.<br>
+                • 🍗 <strong>Smoked Tandoori Chicken</strong> ($13.99): Charcoal-charred skewered chicken marinated in mustard oil and hot spices.`;
+            }
+            if (msg.includes("sweet") || msg.includes("dessert") || msg.includes("mild")) {
+                return `For sweet and mild options, try:<br>
+                • 🍨 <strong>Warm Gulab Jamun</strong> ($5.99): Sweet milk-solid dumplings soaked in cardamom sugar syrup.<br>
+                • 👑 <strong>Royal Butter Chicken</strong> ($17.99): Velvet tomato-cream curry, perfect for a mild, rich flavor.`;
+            }
+            return `Here are some of our guest-favorite specialties: ⭐<br>
+            1. 👑 <strong>Royal Butter Chicken</strong> ($17.99) - Velvet butter curry.<br>
+            2. 🔥 <strong>Hyderabadi Dum Biryani</strong> ($18.99) - Fragrant saffron spiced rice.<br>
+            3. 🧄 <strong>Tandoori Garlic Naan</strong> ($3.99) - Blistered clay-oven flatbread.<br>
+            4. 🍨 <strong>Warm Gulab Jamun</strong> ($5.99) - Cardamom-syrup dumplings.<br><br>
+            Would you like me to add any of these? Say <em>"Add Butter Chicken"</em> to begin!`;
+        }
+
+        // GREETINGS
+        if (msg.includes("hi") || msg.includes("hello") || msg.includes("hey") || msg.includes("namaste") || msg.includes("yo")) {
+            return `Namaste! 🙏 Welcome to **Spice & Charcoal**. I am **SpiceBot**, your personal dining AI.<br>
+            I can help you add food to your cart, recommend dishes, show your total, or guide you to checkout. What are you craving today?`;
+        }
+
+        // FALLBACK
+        return `I'm not entirely sure how to handle that request. 🌶️<br>
+        I can manage your shopping cart and recommend food. Try asking:<br>
+        • <em>"Add Butter Chicken and Garlic Naan"</em><br>
+        • <em>"Show my cart"</em><br>
+        • <em>"Recommend something spicy"</em><br>
+        • <em>"Checkout"</em>`;
+    }
+}
+
+// Initialize chatbot when DOM is ready
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initChatbot);
+} else {
+    initChatbot();
+}
